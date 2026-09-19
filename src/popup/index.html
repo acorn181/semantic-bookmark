@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semantic Bookmark</title>
+    <style>
+      :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #171717; }
+      body { width: 380px; margin: 0; background: #fafafa; }
+      main { padding: 16px; }
+      h1 { margin: 0 0 4px; font-size: 18px; }
+      .subtle { color: #737373; font-size: 12px; }
+      .card { margin-top: 14px; padding: 12px; border: 1px solid #e5e5e5; border-radius: 10px; background: white; }
+      #page-title { margin: 0 0 4px; font-size: 14px; line-height: 1.35; }
+      #page-url { word-break: break-all; }
+      button { width: 100%; margin-top: 12px; padding: 10px 12px; border: 0; border-radius: 8px; background: #171717; color: white; font-weight: 600; cursor: pointer; }
+      button.secondary { background: #e5e5e5; color: #171717; }
+      button:disabled { opacity: .5; cursor: default; }
+      #result { display: none; }
+      .probability { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 5px 0; font-size: 13px; }
+      .selected { font-weight: 700; }
+      .error { color: #b91c1c; white-space: pre-wrap; font-size: 12px; }
+      .success { color: #166534; font-size: 12px; }
+      .footer { margin-top: 12px; text-align: center; }
+      a { color: #525252; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Semantic Bookmark</h1>
+      <div class="subtle">Your rules. Jev decides. Chrome organizes.</div>
+
+      <section class="card">
+        <h2 id="page-title">Loading page…</h2>
+        <div id="page-url" class="subtle"></div>
+      </section>
+
+      <button id="analyze">Analyze bookmark</button>
+
+      <section id="result" class="card">
+        <div id="choice"></div>
+        <div id="probabilities"></div>
+        <button id="save">Save bookmark</button>
+      </section>
+
+      <div id="message"></div>
+
+      <div class="footer">
+        <a href="#" id="open-options">Settings</a>
+      </div>
+    </main>
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>
