@@ -1,5 +1,5 @@
 import {
-  cloneStarterRules,
+  cloneDefaultRules,
   loadSettings,
   saveSettings,
   type BookmarkRule,
@@ -14,14 +14,12 @@ const warningsEl = document.querySelector<HTMLDivElement>("#warnings")!;
 const criteriaPreviewEl = document.querySelector<HTMLPreElement>("#criteria-preview")!;
 const folderSuggestionsEl =
   document.querySelector<HTMLDataListElement>("#folder-suggestions")!;
-const setupBannerEl = document.querySelector<HTMLDivElement>("#setup-banner")!;
 const addRuleButton = document.querySelector<HTMLButtonElement>("#add-rule")!;
-const starterButton = document.querySelector<HTMLButtonElement>("#use-starter")!;
+const defaultsButton = document.querySelector<HTMLButtonElement>("#use-defaults")!;
 const saveButton = document.querySelector<HTMLButtonElement>("#save")!;
 const messageEl = document.querySelector<HTMLDivElement>("#message")!;
 
 let workingRules: BookmarkRule[] = [];
-let setupCompleted = false;
 
 function createRuleId(): string {
   return `rule_${crypto.randomUUID().replace(/-/g, "")}`;
@@ -172,7 +170,7 @@ function renderRules() {
     const labelInput = document.createElement("input");
     labelInput.type = "text";
     labelInput.value = rule.label;
-    labelInput.placeholder = "e.g. AI / Try";
+    labelInput.placeholder = "e.g. Read Later";
     labelInput.addEventListener("input", () => {
       rule.label = labelInput.value;
       title.textContent = rule.label.trim() || `Category ${index + 1}`;
@@ -186,7 +184,7 @@ function renderRules() {
     const folderInput = document.createElement("input");
     folderInput.type = "text";
     folderInput.value = rule.folderPath;
-    folderInput.placeholder = "e.g. AI/Try";
+    folderInput.placeholder = "e.g. Read Later";
     folderInput.setAttribute("list", "folder-suggestions");
     folderInput.addEventListener("input", () => {
       rule.folderPath = folderInput.value;
@@ -308,19 +306,11 @@ async function loadFolderSuggestions() {
 
 async function init() {
   const settings = await loadSettings();
-  setupCompleted = settings.setupCompleted;
 
   apiKeyEl.value = settings.apiKey;
   modelEl.value = settings.model;
   maxContentEl.value = String(settings.maxContentChars);
-
-  workingRules =
-    settings.rules.length > 0 ? cloneRules(settings.rules) : cloneStarterRules();
-
-  setupBannerEl.classList.toggle("visible", !settings.setupCompleted);
-  saveButton.textContent = settings.setupCompleted
-    ? "Save settings"
-    : "Save & finish setup";
+  workingRules = cloneRules(settings.rules);
 
   await loadFolderSuggestions();
   renderRules();
@@ -331,10 +321,10 @@ addRuleButton.addEventListener("click", () => {
   renderRules();
 });
 
-starterButton.addEventListener("click", () => {
-  workingRules = cloneStarterRules();
+defaultsButton.addEventListener("click", () => {
+  workingRules = cloneDefaultRules();
   renderRules();
-  setMessage("Starter categories loaded. Edit them to match your own system.", "none");
+  setMessage("General-purpose defaults restored.", "none");
 });
 
 saveButton.addEventListener("click", async () => {
@@ -354,17 +344,13 @@ saveButton.addEventListener("click", async () => {
       model: modelEl.value.trim() || "jev-latest",
       maxContentChars,
       rules,
-      setupCompleted: true,
     };
 
     await saveSettings(settings);
 
     workingRules = cloneRules(rules);
-    setupCompleted = true;
-    setupBannerEl.classList.remove("visible");
-    saveButton.textContent = "Save settings";
     renderRules();
-    setMessage("Saved. Your classification system is ready.", "success");
+    setMessage("Saved. You're ready to classify bookmarks.", "success");
   } catch (error) {
     setMessage(error instanceof Error ? error.message : String(error), "error");
   } finally {
