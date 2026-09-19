@@ -10,9 +10,10 @@ export type Settings = {
   model: string;
   maxContentChars: number;
   rules: BookmarkRule[];
+  setupCompleted: boolean;
 };
 
-export const DEFAULT_RULES: BookmarkRule[] = [
+export const STARTER_RULES: BookmarkRule[] = [
   {
     id: "ai_try",
     label: "AI / Try",
@@ -47,16 +48,25 @@ export const DEFAULT_SETTINGS: Settings = {
   apiKey: "",
   model: "jev-latest",
   maxContentChars: 12000,
-  rules: DEFAULT_RULES,
+  rules: [],
+  setupCompleted: false,
 };
 
 const STORAGE_KEY = "semanticBookmarkSettings";
 
+export function cloneStarterRules(): BookmarkRule[] {
+  return STARTER_RULES.map((rule) => ({ ...rule }));
+}
+
 export async function loadSettings(): Promise<Settings> {
   const stored = await chrome.storage.local.get(STORAGE_KEY);
+  const raw = (stored[STORAGE_KEY] ?? {}) as Partial<Settings>;
+
   return {
     ...DEFAULT_SETTINGS,
-    ...(stored[STORAGE_KEY] ?? {}),
+    ...raw,
+    rules: Array.isArray(raw.rules) ? raw.rules : [],
+    setupCompleted: raw.setupCompleted === true,
   };
 }
 
