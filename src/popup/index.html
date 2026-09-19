@@ -10,6 +10,7 @@
       main { padding: 16px; }
       h1 { margin: 0 0 4px; font-size: 18px; }
       .subtle { color: #737373; font-size: 12px; }
+      .privacy-note { margin-top: 8px; color: #737373; font-size: 11px; line-height: 1.4; }
       .card { margin-top: 14px; padding: 12px; border: 1px solid #e5e5e5; border-radius: 10px; background: white; }
       #page-title { margin: 0 0 4px; font-size: 14px; line-height: 1.35; }
       #page-url { word-break: break-all; }
@@ -51,6 +52,9 @@
       </section>
 
       <button id="analyze">Analyze bookmark</button>
+      <div class="privacy-note">
+        Analyze sends this page's title, URL, and visible text to TypeSafe/Jev using your API key. Nothing is sent until you click Analyze.
+      </div>
 
       <section id="result" class="card">
         <div id="choice"></div>
