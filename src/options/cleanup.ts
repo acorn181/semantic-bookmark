@@ -39,6 +39,7 @@ export async function initBookmarkCleanup(): Promise<void> {
 
   let results: CleanupResult[] = [];
   let sourceCountRequest = 0;
+  let busy = false;
 
   function setMessage(
     text: string,
@@ -72,6 +73,15 @@ export async function initBookmarkCleanup(): Promise<void> {
     updateApplyButton();
   }
 
+  function setBusy(value: boolean) {
+    busy = value;
+    sourceEl.disabled = value;
+    limitEl.disabled = value;
+    analyzeButton.disabled = value;
+    clearButton.disabled = value;
+    updateApplyButton();
+  }
+
   function updateApplyButton() {
     const moveCount = results.filter(
       (result) =>
@@ -82,7 +92,7 @@ export async function initBookmarkCleanup(): Promise<void> {
 
     applyButton.textContent =
       moveCount === 1 ? "Apply 1 move" : `Apply ${moveCount} moves`;
-    applyButton.disabled = moveCount === 0;
+    applyButton.disabled = busy || moveCount === 0;
   }
 
   async function refreshSourceCount() {
@@ -201,6 +211,7 @@ export async function initBookmarkCleanup(): Promise<void> {
         }
 
         select.value = result.selectedRuleId;
+        select.disabled = busy;
         select.addEventListener("change", () => {
           result.selectedRuleId = select.value;
           result.applyStatus = undefined;
@@ -262,8 +273,7 @@ export async function initBookmarkCleanup(): Promise<void> {
 
   async function analyze() {
     clearPreview();
-    analyzeButton.disabled = true;
-    applyButton.disabled = true;
+    setBusy(true);
 
     try {
       const settings = await loadSettings();
@@ -339,8 +349,7 @@ export async function initBookmarkCleanup(): Promise<void> {
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error), "error");
     } finally {
-      analyzeButton.disabled = false;
-      updateApplyButton();
+      setBusy(false);
     }
   }
 
@@ -363,9 +372,7 @@ export async function initBookmarkCleanup(): Promise<void> {
 
     if (!approved) return;
 
-    analyzeButton.disabled = true;
-    applyButton.disabled = true;
-    clearButton.disabled = true;
+    setBusy(true);
     setMessage("Applying reviewed moves…", "none");
 
     let moved = 0;
@@ -409,9 +416,7 @@ export async function initBookmarkCleanup(): Promise<void> {
       failed > 0 ? "error" : "success",
     );
 
-    analyzeButton.disabled = false;
-    clearButton.disabled = false;
-    updateApplyButton();
+    setBusy(false);
     await refreshSourceCount();
   }
 
