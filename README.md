@@ -4,7 +4,7 @@ Semantic Bookmark is a Chrome extension that organizes bookmarks using **your ow
 
 The core idea is deliberately not "let AI invent a filing system." The extension ships with a useful general-purpose taxonomy so you can start immediately, while still letting **you define the classification system**: which categories exist, what each category means, and where its bookmarks should go.
 
-Jev applies those definitions as a typed Choice decision, then the extension performs the deterministic Chrome bookmark action.
+Jev applies those definitions as a typed Choice decision, then the extension performs deterministic Chrome bookmark actions.
 
 ## Current prototype
 
@@ -20,8 +20,24 @@ The extension supports:
 - manual override when Jev is uncertain
 - automatic creation of a dedicated `Semantic Bookmark` folder tree
 - moving an existing bookmark instead of creating a duplicate when the URL is already bookmarked
+- **bulk cleanup of existing bookmarks with Preview → Apply**
 
 The defaults are ready to use. A new user only needs to provide a Jev API key before analyzing bookmarks.
+
+## Existing bookmark cleanup
+
+Settings includes a cleanup workflow for bookmarks you already have:
+
+1. Choose a bookmark folder/subtree, or all bookmarks.
+2. Pick a batch size (up to 100).
+3. Analyze the batch with your saved semantic categories.
+4. Review each proposed destination, confidence, and probability distribution.
+5. Override any decision or choose **Keep current location**.
+6. Apply the reviewed moves in one explicit action.
+
+Nothing moves during analysis. The existing-bookmark cleanup intentionally starts with **title + URL only**, which keeps the first version predictable and avoids fetching every historical page. It currently makes one Jev request per analyzed bookmark.
+
+When **All bookmarks** is selected, the extension excludes its own `Semantic Bookmark` output tree so completed cleanup work is not immediately reprocessed.
 
 ## Development
 
@@ -61,10 +77,10 @@ The bookmark prototype is the first slice of a broader idea: **semantic organiza
 
 Possible next steps:
 
-- reclassify and reorganize existing bookmarks in bulk
 - smart tab grouping and cleanup
 - route links to different destinations such as bookmarks, read-later tools, or Obsidian
 - configurable confidence thresholds for auto-apply vs. confirmation
+- optional page-content enrichment for historical bookmark cleanup
 
 ## Security note
 
@@ -72,4 +88,4 @@ The Jev API key is currently stored in `chrome.storage.local` for this prototype
 
 ## Status
 
-Very early prototype built to explore Jev as a semantic decision layer inside everyday software.
+Early prototype built to explore Jev as a semantic decision layer inside everyday software.
