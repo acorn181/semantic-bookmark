@@ -56,7 +56,16 @@ function getRule(id: string): BookmarkRule | undefined {
 
 function renderResult(result: JevChoiceResult) {
   const selectedRule = getRule(result.choice);
-  choiceEl.innerHTML = `<strong>${selectedRule?.label ?? result.choice}</strong> · ${Math.round(result.confidence * 100)}% confidence`;
+  choiceEl.replaceChildren();
+
+  const strong = document.createElement("strong");
+  strong.textContent = selectedRule?.label ?? result.choice;
+  choiceEl.append(
+    strong,
+    document.createTextNode(
+      ` · ${Math.round(result.confidence * 100)}% confidence`,
+    ),
+  );
 
   probabilitiesEl.replaceChildren();
   const sorted = Object.entries(result.probabilities).sort((a, b) => b[1] - a[1]);
