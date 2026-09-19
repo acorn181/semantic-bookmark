@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semantic Bookmark Settings</title>
+    <style>
+      :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #171717; }
+      body { margin: 0; background: #fafafa; }
+      main { max-width: 760px; margin: 40px auto; padding: 0 20px 60px; }
+      h1 { margin-bottom: 6px; }
+      p { color: #525252; }
+      label { display: block; margin: 20px 0 6px; font-weight: 650; }
+      input, textarea { width: 100%; box-sizing: border-box; border: 1px solid #d4d4d4; border-radius: 8px; padding: 10px; background: white; font: inherit; }
+      textarea { min-height: 360px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+      button { margin-top: 20px; padding: 10px 16px; border: 0; border-radius: 8px; background: #171717; color: white; font-weight: 650; cursor: pointer; }
+      #message { margin-top: 12px; font-size: 13px; }
+      .success { color: #166534; }
+      .error { color: #b91c1c; white-space: pre-wrap; }
+      code { background: #e5e5e5; padding: 2px 5px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Semantic Bookmark Settings</h1>
+      <p>
+        Define your own semantic filing rules. Jev chooses among them; Semantic Bookmark performs the actual Chrome bookmark action.
+      </p>
+
+      <label for="api-key">Jev API key</label>
+      <input id="api-key" type="password" autocomplete="off" placeholder="Paste your TypeSafe API key" />
+
+      <label for="model">Model</label>
+      <input id="model" type="text" value="jev-latest" />
+
+      <label for="max-content">Maximum page text characters</label>
+      <input id="max-content" type="number" min="500" max="50000" step="500" />
+
+      <label for="rules">Rules (JSON)</label>
+      <p>
+        Each rule needs a unique <code>id</code>, display <code>label</code>, semantic
+        <code>description</code>, and Chrome <code>folderPath</code>.
+      </p>
+      <textarea id="rules" spellcheck="false"></textarea>
+
+      <button id="save">Save settings</button>
+      <div id="message"></div>
+    </main>
+    <script type="module" src="./options.ts"></script>
+  </body>
+</html>
