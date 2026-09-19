@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/icons/icon128.png" width="96" height="96" alt="Semantic Bookmark icon" />
+</p>
+
 # Semantic Bookmark
 
 Semantic Bookmark is a Chrome extension that organizes bookmarks using **your own semantic rules** powered by [Jev](https://typesafe.ai/).
@@ -39,6 +43,16 @@ Nothing moves during analysis. The existing-bookmark cleanup intentionally start
 
 When **All bookmarks** is selected, the extension excludes its own `Semantic Bookmark` output tree so completed cleanup work is not immediately reprocessed.
 
+## Privacy
+
+Semantic Bookmark does not run a developer backend, analytics, or ads.
+
+For active-page classification, clicking **Analyze bookmark** sends the current page title, URL, visible page text, and your configured semantic category definitions directly from the extension to TypeSafe/Jev using your own API key. Nothing is sent before you click Analyze.
+
+Bulk cleanup sends the selected bookmark titles and URLs to TypeSafe/Jev only after you explicitly start analysis. Historical page content is not fetched for bulk cleanup.
+
+See [PRIVACY.md](PRIVACY.md) for the full policy.
+
 ## Development
 
 Requirements:
@@ -65,6 +79,14 @@ On first use:
 
 You can customize the classification categories at any time. Destination paths are created below the top-level `Semantic Bookmark` Chrome bookmark folder.
 
+## Chrome Web Store preparation
+
+Store listing copy, permission justifications, privacy declarations, asset locations, and packaging instructions live in [CHROME_WEB_STORE.md](CHROME_WEB_STORE.md).
+
+A GitHub Actions workflow can also build a store-ready ZIP whose root contains `manifest.json`.
+
+The only submission asset intentionally not included in the repository is a real 1280×800 screenshot of the extension UI.
+
 ## Product principle
 
 The default taxonomy exists to remove onboarding friction. The durable product behavior is still:
@@ -84,8 +106,8 @@ Possible next steps:
 
 ## Security note
 
-The Jev API key is currently stored in `chrome.storage.local` for this prototype. Do not commit API keys to the repository.
+The Jev API key is stored in `chrome.storage.local` and is transmitted to TypeSafe only as the authorization credential for explicit classification requests. Do not commit API keys to the repository.
 
 ## Status
 
-Early prototype built to explore Jev as a semantic decision layer inside everyday software.
+Early public prototype built to explore Jev as a semantic decision layer inside everyday software.
