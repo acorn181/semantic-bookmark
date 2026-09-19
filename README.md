@@ -2,13 +2,15 @@
 
 Semantic Bookmark is a Chrome extension that organizes bookmarks using **your own semantic rules** powered by [Jev](https://typesafe.ai/).
 
-The core idea is deliberately not "let AI invent a filing system." **You define the classification system**: which categories exist, what each category means, and where its bookmarks should go. Jev applies those definitions as a typed Choice decision, then the extension performs the deterministic Chrome bookmark action.
+The core idea is deliberately not "let AI invent a filing system." The extension ships with a useful general-purpose taxonomy so you can start immediately, while still letting **you define the classification system**: which categories exist, what each category means, and where its bookmarks should go.
+
+Jev applies those definitions as a typed Choice decision, then the extension performs the deterministic Chrome bookmark action.
 
 ## Current prototype
 
 The extension supports:
 
-- first-run classification setup
+- useful default categories: Read Later, Tools & Services, Reference, Shopping & Wishlist, Other
 - add / rename / reorder / remove semantic categories
 - natural-language definition for each category
 - destination folder path for each category
@@ -19,13 +21,7 @@ The extension supports:
 - automatic creation of a dedicated `Semantic Bookmark` folder tree
 - moving an existing bookmark instead of creating a duplicate when the URL is already bookmarked
 
-Example category:
-
-- **Name:** `AI / Try`
-- **Meaning:** `An AI product, service, library, SDK, or tool I would realistically want to try myself. Exclude news and commentary.`
-- **Destination:** `AI/Try`
-
-That becomes one criterion in the Jev Choice request. The user owns the taxonomy; Jev executes it.
+The defaults are ready to use. A new user only needs to provide a Jev API key before analyzing bookmarks.
 
 ## Development
 
@@ -48,11 +44,16 @@ On first use:
 
 1. Open extension **Settings**.
 2. Add your Jev API key.
-3. Define or edit at least two classification categories.
-4. Save and finish setup.
-5. Open any normal web page and use the extension popup to classify and save it.
+3. Save settings.
+4. Open any normal web page and use the extension popup to classify and save it.
 
-Destination paths are created below the top-level `Semantic Bookmark` Chrome bookmark folder.
+You can customize the classification categories at any time. Destination paths are created below the top-level `Semantic Bookmark` Chrome bookmark folder.
+
+## Product principle
+
+The default taxonomy exists to remove onboarding friction. The durable product behavior is still:
+
+> Human defines meaning → Jev makes the semantic decision → deterministic software takes action.
 
 ## Product direction
 
