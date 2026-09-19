@@ -56,9 +56,9 @@ function getRule(id: string): BookmarkRule | undefined {
 }
 
 function ensureReady(settingsToCheck: Settings) {
-  if (!settingsToCheck.setupCompleted || settingsToCheck.rules.length < 2) {
+  if (settingsToCheck.rules.length < 2) {
     throw new Error(
-      "Finish classification setup in Settings before analyzing bookmarks.",
+      "Configure at least two classification categories in Settings.",
     );
   }
 
@@ -153,7 +153,7 @@ analyzeButton.addEventListener("click", async () => {
   } catch (error) {
     setMessage(error instanceof Error ? error.message : String(error), "error");
   } finally {
-    if (settings?.setupCompleted && settings.apiKey) {
+    if (settings?.rules.length >= 2 && settings.apiKey) {
       analyzeButton.disabled = false;
     }
   }
