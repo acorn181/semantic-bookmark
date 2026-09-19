@@ -79,6 +79,13 @@ export async function initBookmarkCleanup(): Promise<void> {
     limitEl.disabled = value;
     analyzeButton.disabled = value;
     clearButton.disabled = value;
+
+    // Result selects are rendered while analysis/apply is busy. Re-sync them
+    // when processing finishes so the preview becomes editable again.
+    for (const select of resultsEl.querySelectorAll<HTMLSelectElement>("select")) {
+      select.disabled = value;
+    }
+
     updateApplyButton();
   }
 
