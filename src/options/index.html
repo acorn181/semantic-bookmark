@@ -27,17 +27,15 @@
         background: white;
       }
 
-      .setup-banner {
-        display: none;
+      .ready-banner {
         margin-top: 20px;
         padding: 14px 16px;
-        border: 1px solid #f0c36d;
+        border: 1px solid #bbd7c0;
         border-radius: 10px;
-        background: #fff8e8;
+        background: #f2faf3;
       }
 
-      .setup-banner.visible { display: block; }
-      .setup-banner strong { display: block; margin-bottom: 3px; }
+      .ready-banner strong { display: block; margin-bottom: 3px; }
 
       label {
         display: block;
@@ -128,9 +126,7 @@
         gap: 12px;
       }
 
-      .rule-title {
-        font-weight: 750;
-      }
+      .rule-title { font-weight: 750; }
 
       .rule-actions {
         display: flex;
@@ -207,9 +203,9 @@
         You decide the classification system. Jev applies your definitions; Chrome performs the bookmark action.
       </p>
 
-      <div id="setup-banner" class="setup-banner">
-        <strong>Finish classification setup before using the extension.</strong>
-        Choose what categories exist, explain what each one means, and map each category to a bookmark folder.
+      <div class="ready-banner">
+        <strong>The defaults are ready to use.</strong>
+        To get started, paste your Jev API key and save. Customize the categories only if you want a different filing system.
       </div>
 
       <section class="panel">
@@ -232,9 +228,9 @@
       </section>
 
       <section class="panel">
-        <h2>Your classification system</h2>
+        <h2>Classification categories</h2>
         <p>
-          Categories should describe <strong>meaning</strong>, not just keywords. Keep them as mutually exclusive as practical so Jev can make a confident Choice.
+          The built-in categories are intentionally general-purpose. Keep them as-is, or tailor the names, meanings, and destinations to your own workflow.
         </p>
         <p class="hint">
           Destination paths are created under the top-level <code>Semantic Bookmark</code> Chrome bookmark folder.
@@ -242,7 +238,7 @@
 
         <div class="rules-toolbar">
           <button id="add-rule" type="button">Add category</button>
-          <button id="use-starter" type="button" class="secondary">Use starter categories</button>
+          <button id="use-defaults" type="button" class="secondary">Restore defaults</button>
         </div>
 
         <div id="rules-list"></div>
