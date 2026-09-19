@@ -5,6 +5,7 @@ import {
   type BookmarkRule,
   type Settings,
 } from "../lib/settings";
+import { initBookmarkCleanup } from "./cleanup";
 
 const apiKeyEl = document.querySelector<HTMLInputElement>("#api-key")!;
 const modelEl = document.querySelector<HTMLInputElement>("#model")!;
@@ -360,4 +361,13 @@ saveButton.addEventListener("click", async () => {
 
 void init().catch((error) => {
   setMessage(error instanceof Error ? error.message : String(error), "error");
+});
+
+void initBookmarkCleanup().catch((error) => {
+  const cleanupMessage = document.querySelector<HTMLDivElement>("#cleanup-message");
+  if (cleanupMessage) {
+    cleanupMessage.className = "error";
+    cleanupMessage.textContent =
+      error instanceof Error ? error.message : String(error);
+  }
 });

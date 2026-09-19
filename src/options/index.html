@@ -13,9 +13,10 @@
 
       * { box-sizing: border-box; }
       body { margin: 0; }
-      main { max-width: 920px; margin: 40px auto; padding: 0 20px 72px; }
+      main { max-width: 980px; margin: 40px auto; padding: 0 20px 72px; }
       h1 { margin: 0 0 6px; font-size: 30px; }
       h2 { margin: 0 0 6px; font-size: 20px; }
+      h3 { margin: 0; font-size: 15px; }
       p { color: #525252; line-height: 1.5; }
       code { background: #e5e5e5; padding: 2px 5px; border-radius: 4px; }
 
@@ -44,7 +45,7 @@
         font-weight: 700;
       }
 
-      input, textarea {
+      input, textarea, select {
         width: 100%;
         border: 1px solid #d4d4d4;
         border-radius: 8px;
@@ -66,11 +67,20 @@
         gap: 16px;
       }
 
-      .rules-toolbar {
+      .rules-toolbar,
+      .cleanup-toolbar {
         display: flex;
         flex-wrap: wrap;
+        align-items: end;
         gap: 8px;
         margin-top: 14px;
+      }
+
+      .cleanup-source {
+        display: grid;
+        grid-template-columns: minmax(260px, 1fr) 140px;
+        gap: 12px;
+        flex: 1;
       }
 
       button {
@@ -106,22 +116,25 @@
         cursor: default;
       }
 
-      #rules-list {
+      #rules-list,
+      #cleanup-results {
         display: grid;
         gap: 12px;
         margin-top: 16px;
       }
 
-      .rule-card {
+      .rule-card,
+      .cleanup-card {
         padding: 16px;
         border: 1px solid #dedede;
         border-radius: 12px;
         background: #fcfcfc;
       }
 
-      .rule-header {
+      .rule-header,
+      .cleanup-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         gap: 12px;
       }
@@ -139,7 +152,8 @@
         gap: 12px;
       }
 
-      .hint {
+      .hint,
+      .muted {
         margin: 7px 0 0;
         color: #737373;
         font-size: 12px;
@@ -179,20 +193,95 @@
         font-size: 12px;
       }
 
-      .save-row {
+      .save-row,
+      .apply-row {
         display: flex;
         align-items: center;
         gap: 12px;
         margin-top: 22px;
       }
 
-      #message { font-size: 13px; }
+      #message,
+      #cleanup-message {
+        font-size: 13px;
+      }
+
       .success { color: #166534; }
       .error { color: #b91c1c; white-space: pre-wrap; }
 
+      .cleanup-meta {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: #f5f5f5;
+        color: #525252;
+        font-size: 13px;
+      }
+
+      .cleanup-url {
+        max-width: 620px;
+        overflow: hidden;
+        color: #737373;
+        font-size: 12px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .confidence {
+        flex: none;
+        padding: 4px 7px;
+        border-radius: 999px;
+        background: #ececec;
+        color: #525252;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .confidence.low {
+        background: #fff2cc;
+        color: #7c5200;
+      }
+
+      .cleanup-decision {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) minmax(240px, 1.3fr);
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .probabilities {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .probability-chip {
+        padding: 4px 7px;
+        border-radius: 999px;
+        background: #f0f0f0;
+        color: #525252;
+        font-size: 11px;
+      }
+
+      .cleanup-status {
+        margin-top: 8px;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
       @media (max-width: 700px) {
-        .settings-grid, .rule-grid { grid-template-columns: 1fr; }
-        .rule-header { align-items: flex-start; flex-direction: column; }
+        .settings-grid,
+        .rule-grid,
+        .cleanup-source,
+        .cleanup-decision {
+          grid-template-columns: 1fr;
+        }
+
+        .rule-header,
+        .cleanup-header {
+          flex-direction: column;
+        }
       }
     </style>
   </head>
@@ -250,12 +339,45 @@
         </details>
       </section>
 
-      <datalist id="folder-suggestions"></datalist>
-
       <div class="save-row">
         <button id="save">Save settings</button>
         <div id="message"></div>
       </div>
+
+      <section class="panel" id="cleanup">
+        <h2>Clean up existing bookmarks</h2>
+        <p>
+          Pick a bookmark folder, let Jev classify its bookmarks against your <strong>saved</strong> categories, review every decision, then apply the moves in one batch.
+        </p>
+        <p class="hint">
+          Nothing moves during analysis. Bulk cleanup currently uses bookmark title + URL only, and makes one Jev request per analyzed bookmark.
+        </p>
+
+        <div class="cleanup-toolbar">
+          <div class="cleanup-source">
+            <div>
+              <label for="cleanup-source">Source folder</label>
+              <select id="cleanup-source"></select>
+            </div>
+            <div>
+              <label for="cleanup-limit">Analyze up to</label>
+              <input id="cleanup-limit" type="number" min="1" max="100" value="25" />
+            </div>
+          </div>
+          <button id="cleanup-analyze" type="button">Analyze bookmarks</button>
+        </div>
+
+        <div id="cleanup-meta" class="cleanup-meta">Loading bookmark folders…</div>
+        <div id="cleanup-message"></div>
+        <div id="cleanup-results"></div>
+
+        <div id="cleanup-apply-row" class="apply-row" hidden>
+          <button id="cleanup-apply" type="button">Apply moves</button>
+          <button id="cleanup-clear" type="button" class="secondary">Clear preview</button>
+        </div>
+      </section>
+
+      <datalist id="folder-suggestions"></datalist>
     </main>
 
     <script type="module" src="./options.ts"></script>
