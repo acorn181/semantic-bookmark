@@ -7,14 +7,12 @@ Prepared assets:
 
 The 16×16, 32×32, and 48×48 variants under `public/icons/` are used by Chrome UI surfaces.
 
-## Screenshot still needed
+## Store screenshots
 
-The store listing still needs at least one 1280×800 screenshot taken from the real extension UI.
+Prepared at 1280×800 from the real extension UI:
 
-Recommended captures:
+1. `screenshots/01-active-page-analysis.jpg` — MDN Fetch API classified as Reference in the popup.
+2. `screenshots/02-classification-categories.jpg` — user-defined semantic category editor.
+3. `screenshots/03-bulk-cleanup-review.jpg` — preview-first bulk cleanup with multiple destination types and a manual override.
 
-1. Popup classification result with probabilities and an overridden destination.
-2. Classification category editor.
-3. Preview-first existing-bookmark cleanup.
-
-Do not include API keys or other credentials in screenshots.
+No API keys or other credentials are visible in the screenshots.

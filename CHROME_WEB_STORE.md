@@ -66,15 +66,11 @@ Already prepared in the repository:
 - Extension/store icon: `public/icons/icon128.png`
 - Small promo tile: `store-assets/small-promo-440x280.png`
 
-Still required before submission:
+Prepared screenshots:
 
-- At least one **1280×800** screenshot. Up to five can be supplied.
-
-Suggested screenshots:
-
-1. Popup after Analyze, showing classification probabilities and manual override.
-2. Settings page showing editable semantic categories.
-3. Existing-bookmark cleanup preview before Apply.
+1. `store-assets/screenshots/01-active-page-analysis.jpg` — active-page classification.
+2. `store-assets/screenshots/02-classification-categories.jpg` — editable semantic categories.
+3. `store-assets/screenshots/03-bulk-cleanup-review.jpg` — preview-first cleanup, multiple category results, and a manual override.
 
 Optional:
 
