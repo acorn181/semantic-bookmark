@@ -17,8 +17,23 @@
       button.secondary { background: #e5e5e5; color: #171717; }
       button:disabled { opacity: .5; cursor: default; }
       #result { display: none; }
-      .probability { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 5px 0; font-size: 13px; }
-      .selected { font-weight: 700; }
+      .probability {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        width: 100%;
+        margin: 2px 0;
+        padding: 7px 8px;
+        border: 1px solid transparent;
+        border-radius: 7px;
+        background: transparent;
+        color: #171717;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 400;
+      }
+      .probability:hover { background: #f5f5f5; }
+      .probability.selected { border-color: #d4d4d4; background: #f5f5f5; font-weight: 700; }
       .error { color: #b91c1c; white-space: pre-wrap; font-size: 12px; }
       .success { color: #166534; font-size: 12px; }
       .footer { margin-top: 12px; text-align: center; }
