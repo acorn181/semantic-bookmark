@@ -15,6 +15,7 @@ const optionsLink = document.querySelector<HTMLAnchorElement>("#open-options")!;
 let settings: Settings;
 let pageState: PageState;
 let classification: JevChoiceResult | null = null;
+let selectedChoice: string | null = null;
 
 function setMessage(text: string, kind: "error" | "success" | "none" = "none") {
   messageEl.className = kind;
@@ -55,24 +56,37 @@ function getRule(id: string): BookmarkRule | undefined {
 }
 
 function renderResult(result: JevChoiceResult) {
-  const selectedRule = getRule(result.choice);
+  if (!selectedChoice) {
+    selectedChoice = result.choice;
+  }
+
+  const selectedRule = getRule(selectedChoice);
   choiceEl.replaceChildren();
 
   const strong = document.createElement("strong");
-  strong.textContent = selectedRule?.label ?? result.choice;
-  choiceEl.append(
-    strong,
-    document.createTextNode(
-      ` · ${Math.round(result.confidence * 100)}% confidence`,
-    ),
+  strong.textContent = getRule(result.choice)?.label ?? result.choice;
+
+  const confidenceText = document.createTextNode(
+    ` · ${Math.round(result.confidence * 100)}% confidence`,
   );
+
+  choiceEl.append(strong, confidenceText);
+
+  if (result.confidence < 0.5) {
+    const note = document.createElement("div");
+    note.className = "subtle";
+    note.textContent = "Low confidence — choose the destination below if needed.";
+    choiceEl.append(note);
+  }
 
   probabilitiesEl.replaceChildren();
   const sorted = Object.entries(result.probabilities).sort((a, b) => b[1] - a[1]);
 
   for (const [id, probability] of sorted) {
-    const row = document.createElement("div");
-    row.className = `probability ${id === result.choice ? "selected" : ""}`;
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = `probability ${id === selectedChoice ? "selected" : ""}`;
+    row.setAttribute("aria-pressed", String(id === selectedChoice));
 
     const name = document.createElement("span");
     name.textContent = getRule(id)?.label ?? id;
@@ -81,6 +95,10 @@ function renderResult(result: JevChoiceResult) {
     value.textContent = `${Math.round(probability * 100)}%`;
 
     row.append(name, value);
+    row.addEventListener("click", () => {
+      selectedChoice = id;
+      renderResult(result);
+    });
     probabilitiesEl.append(row);
   }
 
@@ -106,6 +124,7 @@ analyzeButton.addEventListener("click", async () => {
   analyzeButton.disabled = true;
   saveButton.disabled = true;
   classification = null;
+  selectedChoice = null;
   resultEl.style.display = "none";
   setMessage("");
 
@@ -123,11 +142,11 @@ analyzeButton.addEventListener("click", async () => {
 });
 
 saveButton.addEventListener("click", async () => {
-  if (!classification) return;
+  if (!classification || !selectedChoice) return;
 
-  const rule = getRule(classification.choice);
+  const rule = getRule(selectedChoice);
   if (!rule) {
-    setMessage(`No rule configured for "${classification.choice}".`, "error");
+    setMessage(`No rule configured for "${selectedChoice}".`, "error");
     return;
   }
 
