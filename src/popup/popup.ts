@@ -55,6 +55,18 @@ function getRule(id: string): BookmarkRule | undefined {
   return settings.rules.find((rule) => rule.id === id);
 }
 
+function ensureReady(settingsToCheck: Settings) {
+  if (!settingsToCheck.setupCompleted || settingsToCheck.rules.length < 2) {
+    throw new Error(
+      "Finish classification setup in Settings before analyzing bookmarks.",
+    );
+  }
+
+  if (!settingsToCheck.apiKey.trim()) {
+    throw new Error("Set your Jev API key in Settings first.");
+  }
+}
+
 function renderResult(result: JevChoiceResult) {
   if (!selectedChoice) {
     selectedChoice = result.choice;
@@ -115,8 +127,11 @@ async function init() {
   titleEl.textContent = pageState.title;
   urlEl.textContent = pageState.url;
 
-  if (!settings.apiKey) {
-    setMessage("Set your Jev API key in Settings first.", "error");
+  try {
+    ensureReady(settings);
+  } catch (error) {
+    analyzeButton.disabled = true;
+    setMessage(error instanceof Error ? error.message : String(error), "error");
   }
 }
 
@@ -130,6 +145,7 @@ analyzeButton.addEventListener("click", async () => {
 
   try {
     settings = await loadSettings();
+    ensureReady(settings);
     pageState = await getActivePage(settings.maxContentChars);
     classification = await classifyPage(pageState, settings);
     renderResult(classification);
@@ -137,7 +153,9 @@ analyzeButton.addEventListener("click", async () => {
   } catch (error) {
     setMessage(error instanceof Error ? error.message : String(error), "error");
   } finally {
-    analyzeButton.disabled = false;
+    if (settings?.setupCompleted && settings.apiKey) {
+      analyzeButton.disabled = false;
+    }
   }
 });
 
