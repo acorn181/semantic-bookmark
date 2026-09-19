@@ -3,7 +3,7 @@ import { defineManifest } from "@crxjs/vite-plugin";
 export default defineManifest({
   manifest_version: 3,
   name: "Semantic Bookmark",
-  version: "0.1.0",
+  version: "0.2.1",
   description: "Organize bookmarks with your own semantic rules using Jev.",
   permissions: ["activeTab", "scripting", "bookmarks", "storage"],
   host_permissions: ["https://api.typesafe.ai/*"],
