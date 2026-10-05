@@ -10,7 +10,13 @@ The core idea is deliberately not "let AI invent a filing system." The extension
 
 Jev applies those definitions as a typed Choice decision, then the extension performs deterministic Chrome bookmark actions.
 
-## Current prototype
+## Install
+
+Semantic Bookmark is available on the [Chrome Web Store](https://chromewebstore.google.com/detail/semantic-bookmark/pdibedmfodcjimbmpgnhkbkecklmjceh).
+
+A TypeSafe/Jev API key is required. Add it from the extension **Settings** page after installation.
+
+## Features
 
 The extension supports:
 
@@ -79,9 +85,11 @@ On first use:
 
 You can customize the classification categories at any time. Destination paths are created below the top-level `Semantic Bookmark` Chrome bookmark folder.
 
-## Chrome Web Store preparation
+## Chrome Web Store
 
-Store listing copy, permission justifications, privacy declarations, asset locations, and packaging instructions live in [CHROME_WEB_STORE.md](CHROME_WEB_STORE.md).
+Semantic Bookmark is publicly available on the [Chrome Web Store](https://chromewebstore.google.com/detail/semantic-bookmark/pdibedmfodcjimbmpgnhkbkecklmjceh).
+
+Store listing copy, permission justifications, privacy declarations, asset locations, and packaging instructions for maintainers live in [CHROME_WEB_STORE.md](CHROME_WEB_STORE.md).
 
 A GitHub Actions workflow can also build a store-ready ZIP whose root contains `manifest.json`.
 
@@ -108,6 +116,12 @@ Possible next steps:
 
 The Jev API key is stored in `chrome.storage.local` and is transmitted to TypeSafe only as the authorization credential for explicit classification requests. Do not commit API keys to the repository.
 
+## Write-up
+
+A Japanese write-up about the idea, implementation, and Jev integration is available on Zenn:
+
+- [Jevで「自分のルール通りにブックマークを整理する」Chrome拡張を作った](https://zenn.dev/acorn181/articles/a24f9f359e6f95)
+
 ## Status
 
-Early public prototype built to explore Jev as a semantic decision layer inside everyday software.
+Publicly available on the Chrome Web Store as an early prototype exploring Jev as a semantic decision layer inside everyday software.
